@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StudyFlow Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+        .settings-page {
+            margin-left: 50px;
+            padding: 40px;
+            background: #f5f7fb;
+            min-height: 100vh;
+        }
+
+
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+        }
+
+        .header h1 {
+            color: var(--primary);
+        }
+
+        .back {
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .green {
+            background: #16a34a;
+        }
+
+        .red {
+            background: #dc2626;
+        }
+
+        .option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 12px 0;
+        }
+
+        .option input {
+            width: auto;
+        }
+
+        .dark {
+            background: #111827;
+            color: white;
+        }
+
+        .dark .card,
+        .dark .header {
+            background: #1f2937;
+        }
+
+        @media(max-width:800px) {
+            .settings-page {
+                margin-left: 0;
+                padding: 20px;
+            }
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <div class="settings-page">
+        <div class="header">
+            <div>
+                <h1>
+                    ⚙️ StudyFlow Settings
+                </h1>
+                <p>
+                    Manage your study experience
+                </p>
+            </div>
+            <a href="dashboard.html" class="back">
+                ⬅ Dashboard
+            </a>
+        </div>
+
+        <div class="settings-grid">
+            <!-- STUDY SETTINGS -->
+            <div class="card">
+                <h2>
+                    📚 Study Preferences
+                </h2>
+                <label>
+                    Daily Study Goal (Hours)
+                </label>
+                <input type="number" id="goal" value="8">
+                <label>
+                    Preferred Study Session
+                </label>
+                <select id="session">
+                    <option>Morning</option>
+                    <option>Afternoon</option>
+                    <option>Night</option>
+                </select>
+
+                <label>
+                    Break Duration (Minutes)
+                </label>
+                <input type="number" id="breakTime" value="15">
+
+                <div class="option">
+                    Auto Focus Mode
+                    <input type="checkbox" id="focus">
+
+                </div>
+
+                <button onclick="saveStudy()">
+                    Save Settings
+                </button>
+            </div>
+            <!-- APPEARANCE -->
+
+            <div class="card">
+                <h2>
+                    🎨 Appearance
+                </h2>
+                <button onclick="lightMode()">
+
+                    ☀ Light Mode
+
+                </button>
+
+                <button onclick="darkMode()">
+
+                    🌙 Dark Mode
+
+                </button>
+
+                <select onchange="changeColor(this.value)">
+
+                    <option value="#4f46e5">
+                        Purple
+                    </option>
+
+                    <option value="#16a34a">
+                        Green
+                    </option>
+
+                    <option value="#2563eb">
+                        Blue
+                    </option>
+
+                    <option value="#dc2626">
+                        Red
+                    </option>
+
+                </select>
+
+
+            </div>
+
+            <!-- NOTIFICATION -->
+
+            <div class="card">
+                <h2>
+                    🔔 Notification
+                </h2>
+
+
+                <div class="option">
+                    Task Reminder
+                    <input type="checkbox" id="taskNotify">
+
+                </div>
+
+
+                <div class="option">
+                    Study Reminder
+                    <input type="checkbox" id="studyNotify">
+
+                </div>
+
+                <div class="option">
+                    Sound
+                    <input type="checkbox" id="sound">
+
+                </div>
+
+                <button onclick="saveNotification()">
+                    Save Notification
+                </button>
+
+            </div>
+
+            <!-- DATA MANAGEMENT -->
+
+            <div class="card">
+                <h2>
+                    💾 Data Management
+                </h2>
+
+                <button onclick="exportData()">
+                    📥 Export Data
+                </button>
+
+                <button onclick="clearTasks()" class="red">
+                    🗑 Clear Tasks
+                </button>
+
+                <button onclick="resetApp()" class="red">
+                    Reset App
+                </button>
+                <button onclick="logout()" class="red">
+                    🚪 Logout
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+
+        // =========================
+        // USER
+        // =========================
+
+        let user = localStorage.getItem("studyUser") || "User";
+
+
+        // =========================
+        // LOAD SETTINGS
+        // =========================
+
+        // Study Goal
+        const goal = document.getElementById("goal");
+        if (goal) {
+            goal.value = localStorage.getItem("dailyGoal") || 8;
+        }
+
+        // Break Time
+        const breakTime = document.getElementById("breakTime");
+        if (breakTime) {
+            breakTime.value = localStorage.getItem("breakTime") || 15;
+        }
+
+        // Study Session
+        const session = document.getElementById("session");
+        if (session) {
+            session.value = localStorage.getItem("studySession") || "Morning";
+        }
+
+        // Auto Focus
+        const focus = document.getElementById("focus");
+        if (focus) {
+            focus.checked = localStorage.getItem("focusMode") === "true";
+        }
+
+        // Notifications
+        const taskNotify = document.getElementById("taskNotify");
+        if (taskNotify) {
+            taskNotify.checked = localStorage.getItem("taskNotify") === "true";
+        }
+
+        const studyNotify = document.getElementById("studyNotify");
+        if (studyNotify) {
+            studyNotify.checked = localStorage.getItem("studyNotify") === "true";
+        }
+
+        const sound = document.getElementById("sound");
+        if (sound) {
+            sound.checked = localStorage.getItem("sound") === "true";
+        }
+
+        // Theme
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark");
+        }
+
+        // Theme Color
+        const savedColor = localStorage.getItem("color");
+
+        if (savedColor) {
+            document.documentElement.style.setProperty("--primary", savedColor);
+        }
+
+
+        // =========================
+        // SAVE STUDY
+        // =========================
+
+        function saveStudy() {
+
+            localStorage.setItem("dailyGoal", goal.value);
+
+            localStorage.setItem("breakTime", breakTime.value);
+
+            localStorage.setItem("studySession", session.value);
+
+            localStorage.setItem("focusMode", focus.checked);
+
+            alert("Study Settings Saved!");
+
+        }
+
+
+        // =========================
+        // LIGHT MODE
+        // =========================
+
+        function lightMode() {
+
+            document.body.classList.remove("dark");
+
+            localStorage.setItem("theme", "light");
+
+        }
+
+
+        // =========================
+        // DARK MODE
+        // =========================
+
+        function darkMode() {
+
+            document.body.classList.add("dark");
+
+            localStorage.setItem("theme", "dark");
+
+        }
+
+
+        // =========================
+        // CHANGE COLOR
+        // =========================
+
+        function changeColor(color) {
+
+            document.documentElement.style.setProperty("--primary", color);
+
+            localStorage.setItem("color", color);
+
+        }
+
+
+        // =========================
+        // SAVE NOTIFICATION
+        // =========================
+
+        function saveNotification() {
+
+            localStorage.setItem("taskNotify", taskNotify.checked);
+
+            localStorage.setItem("studyNotify", studyNotify.checked);
+
+            localStorage.setItem("sound", sound.checked);
+
+            alert("Notification Saved!");
+
+        }
+
+
+        // =========================
+        // EXPORT DATA
+        // =========================
+
+        function exportData() {
+
+            let data = {
+
+                user: user,
+
+                tasks: JSON.parse(localStorage.getItem(user + "_tasks")) || [],
+
+                settings: localStorage
+
+            };
+
+            let blob = new Blob(
+                [JSON.stringify(data, null, 2)],
+                {type: "application/json"}
+            );
+
+            let a = document.createElement("a");
+
+            a.href = URL.createObjectURL(blob);
+
+            a.download = "StudyFlow_Data.json";
+
+            a.click();
+
+        }
+
+
+        // =========================
+        // CLEAR TASKS
+        // =========================
+
+        function clearTasks() {
+
+            if (confirm("Delete all tasks?")) {
+
+                localStorage.removeItem(user + "_tasks");
+
+                alert("All Tasks Deleted!");
+
+            }
+
+        }
+
+
+        // =========================
+        // RESET APP
+        // =========================
+
+        function resetApp() {
+
+            if (confirm("Reset StudyFlow?")) {
+
+                localStorage.clear();
+
+                window.location.href = "index.html";
+
+            }
+
+        }
+
+
+        // =========================
+        // LOGOUT
+        // =========================
+
+        function logout() {
+
+            if (confirm("Logout?")) {
+
+                localStorage.removeItem("studyUser");
+
+                window.location.href = "index.html";
+
+            }
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

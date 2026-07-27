@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StudyFlow Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+
+<body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fa-solid fa-book-open"></i>
+            <div>
+                <h2>STUDYFLOW</h2>
+                <span>Study Planner</span>
+            </div>
+        </div>
+        <div class="menu">
+            <a href="#" class="active">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+            <a href="calendar.html">
+                <i class="fa-solid fa-calendar"></i>
+                Calendar
+            </a>
+
+            <a href="analytics.html">
+                <i class="fa-solid fa-chart-line"></i>
+                Analytics
+            </a>
+
+            <a href="settings.html">
+                <i class="fa-solid fa-gear"></i>
+                Settings
+            </a>
+        </div>
+
+        <div class="profile">
+            <div class="profile-icon">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div>
+                <h4 id="userName">
+                    User
+                </h4>
+                <p>
+                    Student
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+        <div class="top-card">
+            <h1>
+                Good Morning,
+                <span id="welcomeName">
+                    User
+                </span>
+                👋
+            </h1>
+            <p>
+                Welcome to your Study Dashboard
+            </p>
+        </div>
+
+        <!-- PERFORMANCE -->
+        <div class="card progress-card">
+            <h2>
+                📊 Today's Performance
+            </h2>
+            <div class="progress-circle">
+
+                <span id="progressPercent">
+                    0%
+                </span>
+
+            </div>
+
+            <div class="progress-data">
+                <p>
+                    ✅ Completed:
+
+                    <span id="completedCount">
+                        0
+                    </span>
+
+                </p>
+
+                <p>
+                    ⏳ Pending:
+
+                    <span id="pendingCount">
+                        0
+                    </span>
+
+                </p>
+                <p>
+                    ⏱ Focus Time:
+
+                    <span id="focusTime">
+                        0
+                    </span>
+
+                    Minutes
+
+                </p>
+                <p>
+                    🎯 Goal:
+
+                    <span id="dailyGoal">
+                        8
+                    </span>
+
+                    Hours
+
+                </p>
+
+                <p>
+                    ⭐ Score:
+
+                    <span id="score">
+                        0
+                    </span>
+                    /100
+                </p>
+            </div>
+        </div>
+
+        <!-- BUTTONS -->
+
+
+        <div class="action-buttons">
+            <button onclick="showDailyReport()">
+                <i class="fa-solid fa-calendar-day"></i>
+                Today's Report
+            </button>
+
+            <button onclick="openTaskBox()">
+                <i class="fa-solid fa-plus"></i>
+                Add New Task
+            </button>
+        </div>
+
+        <!-- CREATE TASK -->
+        <div class="card task-box" id="taskBox">
+            <h2>
+                <i class="fa-solid fa-pen"></i>
+                Create Task
+            </h2>
+            <input id="taskName" type="text" placeholder="Task Name">
+            <input id="subject" type="text" placeholder="Subject">
+            <div class="duration-box">
+                <input id="durationHour" type="number" placeholder="Hour">
+                <input id="durationMinute" type="number" placeholder="Minute">
+            </div>
+
+            <button onclick="addTask()">
+                <i class="fa-solid fa-save"></i>
+                Save Task
+            </button>
+        </div>
+
+
+        <!-- TASK LIST -->
+        <div class="card">
+            <h2>
+                <i class="fa-solid fa-list-check"></i>
+
+                My Tasks
+
+            </h2>
+            <div id="taskList">
+            </div>
+        </div>
+
+        <!-- TODAY REPORT -->
+        <div class="card" id="dailyReport">
+            <h2>
+                📅 Today's Study Report
+            </h2>
+            <p>
+                Total Tasks:
+                <span id="reportTotal">
+                    0
+                </span>
+
+            </p>
+            <p>
+                Completed Tasks:
+                <span id="reportCompleted">
+                    0
+                </span>
+            </p>
+            <p>
+                Pending Tasks:
+                <span id="reportPending">
+                    0
+                </span>
+            </p>
+            <p>
+                Focus Time:
+
+                <span id="reportFocus">
+                    0
+                </span>
+
+            </p>
+            <p>
+                Daily Goal:
+
+                <span id="reportGoal">
+                    8
+                </span>
+
+                Hours
+
+            </p>
+            <p>
+                Progress:
+                <span id="reportProgress">
+                    0
+                </span>
+                %
+            </p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>

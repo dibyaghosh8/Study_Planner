@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StudyFlow Calendar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+
+            background: #f5f7fb;
+            padding: 25px;
+
+        }
+
+        /* HEADER */
+        .header {
+
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+            margin-bottom: 25px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+        }
+
+        .header h1 {
+
+            color: #4f46e5;
+
+        }
+
+        .back {
+
+            background: #4f46e5;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+
+        }
+
+        .container {
+
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+
+        }
+
+        .card {
+
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+        }
+
+        /* CALENDAR */
+
+        .calendar-head {
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+
+        }
+
+        .calendar-head button {
+
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+
+        }
+
+
+        .days {
+
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+
+        }
+
+
+        .week {
+
+            text-align: center;
+            font-weight: bold;
+
+        }
+
+
+        .date {
+
+            padding: 15px;
+            background: #f1f5f9;
+            text-align: center;
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+
+        }
+
+
+        .date:hover {
+
+            background: #c7d2fe;
+
+        }
+
+        .today {
+
+            background: #4f46e5;
+            color: white;
+
+        }
+
+
+        .has-plan::after {
+
+            content: "";
+            height: 8px;
+            width: 8px;
+            background: #16a34a;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+
+        }
+
+
+        input,
+        textarea,
+        select {
+
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+
+        }
+
+
+        .save {
+
+            width: 100%;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 13px;
+            border-radius: 12px;
+            cursor: pointer;
+
+        }
+
+
+        .plan {
+
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 15px;
+            background: #eef2ff;
+
+        }
+
+        .normal {
+
+            border-left: 6px solid #2563eb;
+
+        }
+
+
+        .complete {
+
+            border-left: 6px solid #16a34a;
+
+        }
+
+
+        .important {
+
+            border-left: 6px solid #dc2626;
+
+        }
+
+
+
+        .plan button {
+
+            border: none;
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+
+        }
+
+        .edit {
+
+            background: #f59e0b;
+            color: white;
+
+        }
+
+
+
+        .delete {
+
+            background: #dc2626;
+            color: white;
+
+        }
+
+        .completeBtn {
+
+            background: #16a34a;
+            color: white;
+
+        }
+
+
+        @media(max-width:800px) {
+
+            .container {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .header {
+
+                flex-direction: column;
+                gap: 15px;
+
+            }
+
+            .days {
+
+                gap: 5px;
+
+            }
+
+
+            .date {
+
+                padding: 10px;
+
+            }
+
+        }
+    </style>
+
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>
+                📅 StudyFlow Calendar
+            </h1>
+            <p>
+                Smart Study Planner
+            </p>
+        </div>
+        <a href="dashboard.html" class="back">
+            ⬅ Dashboard
+        </a>
+    </div>
+
+    <div class="container">
+        <!-- CALENDAR -->
+        <div class="card">
+            <div class="calendar-head">
+                <button onclick="prevMonth()">
+                    ◀
+                </button>
+                <h2 id="monthYear"></h2>
+                <button onclick="nextMonth()">
+                    ▶
+                </button>
+            </div>
+
+
+            <div class="days">
+                <div class="week">Sun</div>
+                <div class="week">Mon</div>
+                <div class="week">Tue</div>
+                <div class="week">Wed</div>
+                <div class="week">Thu</div>
+                <div class="week">Fri</div>
+                <div class="week">Sat</div>
+            </div>
+            <div class="days" id="calendar"></div>
+        </div>
+
+        <!-- PLAN -->
+
+        <div class="card">
+            <h2>
+                ➕ Add Study Plan
+            </h2>
+            <p id="selectedDate">
+                Select Date
+            </p>
+            <input id="subject" placeholder="Subject">
+            <input id="topic" placeholder="Topic">
+            <input id="time" placeholder="Study Time">
+            <select id="status">
+                <option value="normal">
+                    Normal
+                </option>
+                <option value="important">
+                    Important
+                </option>
+            </select>
+            <button class="save" onclick="savePlan()">
+                Save Plan
+            </button>
+
+            <h2 style="margin-top:25px">
+                📌 My Plans
+            </h2>
+            <div id="plans"></div>
+        </div>
+    </div>
+
+    <script>
+        let date = new Date();
+        let selectedDate = "";
+        let editIndex = null;
+        let plans =
+            JSON.parse(localStorage.getItem("studyPlans")) || [];
+        function loadCalendar() {
+            let calendar = document.getElementById("calendar");
+            calendar.innerHTML = "";
+            let month = date.getMonth();
+            let year = date.getFullYear();
+            document.getElementById("monthYear").innerHTML =
+                date.toLocaleString(
+                    "default",
+                    {
+                        month: "long",
+                        year: "numeric"
+                    }
+                );
+            let firstDay =
+                new Date(year, month, 1).getDay();
+            let totalDays =
+                new Date(year, month + 1, 0).getDate();
+            for (let i = 0; i < firstDay; i++) {
+
+                calendar.innerHTML += "<div></div>";
+
+            }
+            for (let d = 1; d <= totalDays; d++) {
+
+                let div = document.createElement("div");
+                div.className = "date";
+                div.innerHTML = d;
+                let current =
+                    year + "-" + (month + 1) + "-" + d;
+                let today = new Date();
+                if (
+                    d == today.getDate()
+                    &&
+                    month == today.getMonth()
+                    &&
+                    year == today.getFullYear()
+                ) {
+
+                    div.classList.add("today");
+
+                }
+
+                if (
+                    plans.some(p => p.date == current)
+                ) {
+
+                    div.classList.add("has-plan");
+
+                }
+
+                div.onclick = function () {
+                    selectedDate = current;
+                    document.getElementById("selectedDate")
+                        .innerHTML =
+                        "Selected : " + current;
+                    showPlans();
+                };
+                calendar.appendChild(div);
+            }
+
+        }
+
+        function prevMonth() {
+            date.setMonth(
+                date.getMonth() - 1
+            );
+
+            loadCalendar();
+
+        }
+
+        function nextMonth() {
+
+            date.setMonth(
+                date.getMonth() + 1
+            );
+
+            loadCalendar();
+
+        }
+
+
+        function savePlan() {
+            if (selectedDate == "") {
+                alert("Select Date First");
+                return;
+
+            }
+
+            let plan = {
+                date: selectedDate,
+                subject:
+                    document.getElementById("subject").value,
+                topic:
+                    document.getElementById("topic").value,
+                time:
+                    document.getElementById("time").value,
+                status:
+                    document.getElementById("status").value
+            };
+
+            if (plan.subject == "") {
+                alert("Enter Subject");
+                return;
+            }
+
+            if (editIndex !== null) {
+                plans[editIndex] = plan;
+                editIndex = null;
+            }
+            else {
+                plans.push(plan);
+            }
+
+            localStorage.setItem(
+                "studyPlans",
+                JSON.stringify(plans)
+            );
+
+            clearForm();
+            showPlans();
+            loadCalendar();
+        }
+
+        function showPlans() {
+            let box = document.getElementById("plans");
+            box.innerHTML = "";
+            plans.forEach((p, index) => {
+                if (p.date == selectedDate) {
+                    box.innerHTML +=
+                      `
+
+<div class="plan ${p.status}">
+<b>
+${p.subject}
+</b>
+
+<br>
+${p.topic}
+
+<br>
+
+⏱ ${p.time}
+
+<br>
+
+<button class="edit"
+onclick="editPlan(${index})">
+Edit
+
+</button>
+
+<button class="delete"
+onclick="deletePlan(${index})">
+
+Delete
+
+</button>
+
+<button class="completeBtn"
+onclick="completePlan(${index})">
+
+Complete
+
+</button>
+
+
+</div>
+
+`;
+                }
+
+            });
+
+        }
+
+        function editPlan(index) {
+            let p = plans[index];
+            document.getElementById("subject").value = p.subject;
+            document.getElementById("topic").value = p.topic;
+            document.getElementById("time").value = p.time;
+            document.getElementById("status").value = p.status;
+            editIndex = index;
+
+        }
+
+        function deletePlan(index) {
+            if (confirm("Delete this plan?")) {
+                plans.splice(index, 1);
+                localStorage.setItem(
+                    "studyPlans",
+                    JSON.stringify(plans)
+                );
+                showPlans();
+                loadCalendar();
+            }
+
+        }
+
+
+        function completePlan(index) {
+            plans[index].status = "complete";
+            localStorage.setItem(
+                "studyPlans",
+                JSON.stringify(plans)
+            );
+
+            showPlans();
+            loadCalendar();
+        }
+
+        function clearForm() {
+            document.getElementById("subject").value = "";
+            document.getElementById("topic").value = "";
+            document.getElementById("time").value = "";
+        }
+        loadCalendar();
+    </script>
+</body>
+</html>
