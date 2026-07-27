@@ -336,13 +336,22 @@ function formatTime(sec){
 // COMPLETE TASK
 
 function completeTask(index){
+
     if(timers[index]){
         clearInterval(timers[index]);
         delete timers[index];
     }
+
+    if(tasks[index].focusTime===0){
+        tasks[index].focusTime=
+        (tasks[index].hour*60)+tasks[index].minute;
+    }
+
     tasks[index].complete=true;
+
     saveTasks();
     updateProgress();
+    showDailyReport();
     showTask();
 }
 
@@ -395,9 +404,7 @@ function deleteTask(index){
     updateProgress();
     showTask();
 }
-// =========================
 // TODAY'S REPORT
-// =========================
 
 
 function showDailyReport(){
@@ -459,9 +466,8 @@ function showDailyReport(){
 }
 
 
-// =========================
+
 // SAVE TASK
-// =========================
 
 function saveTasks(){
     let user=
@@ -481,9 +487,8 @@ function saveTasks(){
 
 }
 
-// =========================
 // LOAD DATA
-// =========================
+
 
 window.addEventListener("load",function(){
     showTask();
